@@ -1,0 +1,38 @@
+{
+  "direction": {
+    "selected_model": "Random Forest",
+    "primary_metric": "macro_f1",
+    "test_accuracy": 0.5021097046413502,
+    "test_balanced_accuracy": 0.39308342623560016,
+    "test_mcc": 0.12765009441476616,
+    "test_macro_f1": 0.38552678223412057,
+    "test_precision_macro": 0.4111259968102073,
+    "test_recall_macro": 0.39308342623560016,
+    "n_train": 2221,
+    "n_validation": 468,
+    "n_test": 474
+  },
+  "volatility": {
+    "selected_model": "Random Forest",
+    "primary_metric": "macro_f1",
+    "test_accuracy": 0.7130801687763713,
+    "test_balanced_accuracy": 0.5593775593775594,
+    "test_mcc": 0.13109401860148942,
+    "test_macro_f1": 0.5626356925749023,
+    "test_precision_macro": 0.5723574776954484,
+    "test_recall_macro": 0.5593775593775594,
+    "n_train": 2220,
+    "n_validation": 468,
+    "n_test": 474,
+    "test_yes_precision": 0.35294117647058826,
+    "test_yes_recall": 0.2702702702702703,
+    "test_yes_f1": 0.30612244897959184,
+    "test_yes_average_precision": 0.34564957245097194
+  },
+  "splits": {
+    "train": 2221,
+    "validation": 468,
+    "test": 474,
+    "embargo_days": 5
+  }
+}

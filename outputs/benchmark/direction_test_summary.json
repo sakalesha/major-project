@@ -1,0 +1,13 @@
+{
+  "selected_model": "Random Forest",
+  "primary_metric": "macro_f1",
+  "test_accuracy": 0.5021097046413502,
+  "test_balanced_accuracy": 0.39308342623560016,
+  "test_mcc": 0.12765009441476616,
+  "test_macro_f1": 0.38552678223412057,
+  "test_precision_macro": 0.4111259968102073,
+  "test_recall_macro": 0.39308342623560016,
+  "n_train": 2221,
+  "n_validation": 468,
+  "n_test": 474
+}

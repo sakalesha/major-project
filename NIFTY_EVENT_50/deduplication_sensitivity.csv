@@ -1,0 +1,6 @@
+window_days,raw_records,deduplicated_records,dropped_records,primary_records,follow_on_records
+0,3199,3199,0,2637,562
+1,3199,3199,0,2637,562
+2,3199,3199,0,2637,562
+3,3199,3134,65,2600,534
+5,3199,3057,142,2541,516

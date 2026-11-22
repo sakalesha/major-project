@@ -1,107 +1,293 @@
-# NiftyEvent-50: A Sector-Wise Corporate Event and Price Shock Dataset for 50 Leading NSE Equities (49 Nifty 50 Constituents + BSE Ltd)
+# NiftyEvent-50
 
-## 1. Overview and Study Scope
-**NiftyEvent-50** is a standardized corporate event and market price shock benchmark dataset constructed from regulatory disclosures filed on the National Stock Exchange of India (NSE) across 2018–2024 (7 calendar years).
+NiftyEvent-50 is a research project for studying how Indian corporate announcements
+affect stock prices.
 
-### Empirical Scope
-- **Equities Universe:** 50 prominent equities listed on NSE, consisting of **49 Nifty 50 benchmark constituents** and **BSE Ltd** (`BSE.NS`, India's premier stock exchange institution listed on NSE, constituent of Nifty 500). Formally designated as **49 Nifty 50 Constituents + BSE Ltd**.
-- **Study Period:** 2018-01-03 to 2024-12-31.
-- **Total Deduplicated Observations:** **3,199 event filings**
-- **Clean Primary Board Declarations:** **2,637 events (82.4%)** (available standalone in `NiftyEvent50_primary.csv`)
-- **Follow-on Administrative Notices:** **562 events (17.6%)** (Record dates, book closures, payment dates)
-- **Approved Event Categories:** 5 Categories (`Financial Results`, `Dividend Declaration`, `Management Change`, `Bonus Issue`, `Stock Split`).
-- **Research Sector Taxonomy:** 10 active research sectors (`Realty` has 0 constituents in the provided 50 stocks). Granular sub-sectors like retail/durables and aviation/defense/cement are consolidated into parent sectors with complete rationale documented in `data_dictionary.xlsx`.
+It combines:
 
----
+- Corporate announcements filed with the National Stock Exchange of India
+- Historical stock-price data
+- Market and volatility data
+- Machine-learning benchmarks
+- Event-study measures
 
-## 2. Key Methodological Standards
+The project covers 2018 to 2024 and contains **3,199 deduplicated event observations**
+from 50 NSE-listed companies: **49 current Nifty 50 constituents plus BSE Ltd**.
 
-### 2.1 Announcement Timing & T0 Session Alignment
-- **Pre-Market (<09:15 IST Weekdays):** Trades same day ($T_0 = \text{Announcement Date}$) at market open.
-- **Market Hours (09:15–15:30 IST Weekdays):** Trades same day ($T_0 = \text{Announcement Date}$).
-- **Post-Market (>=15:30 IST Weekdays):** Advances to the next active NSE trading day ($T_0 = \text{Next Trading Session}$).
-- **Weekends & Exchange Holidays:** Advances to the next active NSE trading day ($T_0 = \text{Next Trading Session}$).
-- **Timing Distribution:** **70.0% to 70.1%** of corporate announcements occur outside active exchange trading hours (243 weekend, 54 pre-open, and 1,941 to 1,946 post-close depending on exact 15:30 minute boundary assignment).
+## What this project does
 
-### 2.2 Price Series Convention (Adjusted Close)
-All price calculations use split- and dividend-adjusted closing prices (`Adj Close` from Yahoo Finance). This eliminates mechanical -50% to -80% price collapses from the 31 bonus issues and 16 stock splits in the study window.
+For each corporate event, the project records:
 
-### 2.3 Window Dimensions & Event Date Exclusion
-- Stored window files in `ohlcv_windows/` contain **9 rows** ($T_{-3}$ to $T_{+5}$, including $T_0$).
-- **Pre-event price (`pre_event_price`):** Mean of 3 trading sessions strictly prior to the event ($T_{-3}, T_{-2}, T_{-1}$).
-- **Post-event price (`post_event_price`):** Mean of 5 trading sessions strictly subsequent to the event ($T_{+1}, T_{+2}, T_{+3}, T_{+4}, T_{+5}$).
-- **Session $T_0$:** Explicitly excluded from both averages to prevent intra-day spillover.
+- The company and sector
+- The announcement category
+- Whether it is a primary filing or follow-on notice
+- The stock's pre-event and post-event prices
+- The price direction: Up, Down, or Neutral
+- Whether volatility increased
+- Additional market-adjusted return measures
 
-### 2.4 Label Formulas
-- **Price Shock Percentage:**
-  $$\text{shock\_pct} = \left(\frac{\text{post\_event\_price} - \text{pre\_event\_price}}{\text{pre\_event\_price}}\right) \times 100$$
-- **Direction Label:**
-  - `Up`: $\text{shock\_pct} > +0.5\%$
-  - `Down`: $\text{shock\_pct} < -0.5\%$
-  - `Neutral`: $-0.5\% \le \text{shock\_pct} \le +0.5\%$
-- **Volatility Spike Label:**
-  - `Yes`: $\sigma_{\text{window}} > 1.5 \times \sigma_{\text{baseline}}$, where $\sigma_{\text{window}}$ is return volatility across 8 event sessions, and $\sigma_{\text{baseline}}$ is rolling 30-day volatility over $T_{-33}$ to $T_{-4}$.
-  - `No`: Otherwise.
+The five event categories are:
 
----
+1. Financial Results
+2. Dividend Declaration
+3. Management Change
+4. Bonus Issue
+5. Stock Split
 
-## 3. Two-Tier Quality & Validation Framework
+This dataset studies **Financial Results disclosures**, not analyst earnings-surprise
+predictions. It does not have historical analyst-consensus data.
 
-1. **Tier 1 (Automated Consistency Check across all 3,199 rows):**
-   Programmatic recomputation of shock percentage, direction boundaries, and volatility spikes proves 100.0% arithmetic reproducibility from window files and offline price histories.
-2. **Tier 2 (Stratified Substantive Source Audit of 100 events):**
-   A stratified random sample (`seed=42`) of 100 events (35 Financial Results, 25 Dividends, 20 Management Changes, 10 Bonus Issues, 10 Stock Splits) audited against official exchange records on `nsearchives.nseindia.com`, broadcast timestamps, and daily price series.
-   - **Observed Accuracy:** **96.0%** (96 / 100 verified correct corporate actions, 4 administrative noise events flagged in Financial Results). Exceeds the $\ge 90.0\%$ project threshold.
+## Research questions
 
----
+### RQ1: Do different corporate events produce different price reactions?
 
-## 4. Execution & Offline Verification
+The project compares descriptive price shocks, abnormal returns, and cumulative
+abnormal returns across event types and sectors.
 
-### Offline Dataset Verification (Single Command)
-```bash
-python verify_dataset.py
-```
-This script runs 100% offline using `ticker_histories/` and `ohlcv_windows/`, validating price shocks, direction labels, and rolling 30-day volatility baselines without network calls.
+### RQ2: Do corporate events increase market volatility?
 
-### End-to-End Pipeline Execution
-```bash
-# Step 2: Extract & deduplicate announcements from data/
-python scraper.py --data-dir data --output raw_events.csv
+The project compares event-window volatility with a 30-day pre-event baseline.
+The default 1.5 threshold is compared with 1.25 and 2.0 thresholds.
 
-# Step 3: Fetch price histories and slice 9-session windows
-python ohlcv_fetch.py --raw-events raw_events.csv --cache-dir cache --windows-dir ohlcv_windows
+### RQ3: Can pre-event information predict the reaction?
 
-# Step 4: Compute price shock, direction, and volatility labels
-python label_compute.py --summary intermediate_windows_summary.csv --output candidate_labeled_events.csv
+The project trains and compares machine-learning models using real information
+available before each event.
 
-# Step 5: Quality checks and stratified spot check
-python quality_check.py --candidate candidate_labeled_events.csv --spot-check spot_check_100.xlsx
+## Dataset files
 
-# Step 6: Build release and zip
-python build_release.py
-```
+The public release is under [NIFTY_EVENT_50/](/C:/Users/ronad/OneDrive/Desktop/NiftyEvent50_Combined_20_Models/NIFTY_EVENT_50/).
 
----
+Important files:
 
-## 5. Repository Structure
+- [NiftyEvent50_final.csv](/C:/Users/ronad/OneDrive/Desktop/NiftyEvent50_Combined_20_Models/NIFTY_EVENT_50/NiftyEvent50_final.csv)
+  - The main 10-column dataset
+  - 3,199 event observations
+- [NiftyEvent50_primary.csv](/C:/Users/ronad/OneDrive/Desktop/NiftyEvent50_Combined_20_Models/NIFTY_EVENT_50/NiftyEvent50_primary.csv)
+  - 2,637 primary declarations
+- [raw_events.csv](/C:/Users/ronad/OneDrive/Desktop/NiftyEvent50_Combined_20_Models/NIFTY_EVENT_50/raw_events.csv)
+  - Event provenance, filing subject, timestamp, and source URL
+- [NiftyEvent50_enriched.csv](/C:/Users/ronad/OneDrive/Desktop/NiftyEvent50_Combined_20_Models/NIFTY_EVENT_50/NiftyEvent50_enriched.csv)
+  - The final dataset plus verified market features and abnormal returns
+- [data/](/C:/Users/ronad/OneDrive/Desktop/NiftyEvent50_Combined_20_Models/NIFTY_EVENT_50/data/)
+  - 50 source announcement CSV files
+- [ohlcv_windows/](/C:/Users/ronad/OneDrive/Desktop/NiftyEvent50_Combined_20_Models/NIFTY_EVENT_50/ohlcv_windows/)
+  - Nine-session stock-price windows for every event
+- [cache/](/C:/Users/ronad/OneDrive/Desktop/NiftyEvent50_Combined_20_Models/NIFTY_EVENT_50/cache/)
+  - Local historical stock and market-index data
+
+## How the labels are calculated
+
+### Price direction
+
+The direction is calculated from the average adjusted price:
+
+- T-3 to T-1 is used as the pre-event price.
+- T+1 to T+5 is used as the post-event price.
+- T0 is the announcement's effective trading session.
+
 ```text
-StudentName_Objective1/
-├── NiftyEvent50_final.csv       # 10-column canonical dataset with is_primary_filing flag (3,199 rows)
-├── NiftyEvent50_primary.csv     # Clean primary board declarations subset (2,637 rows)
-├── raw_events.csv              # Master event catalog with provenance and PDF URLs (3,199 rows)
-├── ohlcv_windows/              # 3,199 individual 9-session OHLCV window CSV files
-├── ticker_histories/           # 50 complete daily price histories for offline baseline verification
-├── data/                       # 50 raw NSE announcement CSV files from Step 2
-├── data_dictionary.xlsx        # 4-sheet schema, sector, and taxonomy documentation
-├── spot_check_100.xlsx         # Stratified 100-event source audit workbook (96.0% score)
-├── dataset_statistics.ipynb    # Executed Jupyter notebook with rendered figures & tables
-├── verify_dataset.py           # Standalone offline verification script
-├── scraper.py                  # Step 2 announcement scraping & deduplication script
-├── ohlcv_fetch.py              # Step 3 market data fetch & T0 session alignment script
-├── label_compute.py            # Step 4 price shock & volatility labeling script
-├── quality_check.py            # Step 5 quality assurance and spot-check sampling script
-├── build_release.py            # Step 6 release building and packaging script
-├── requirements.txt            # Pinned library dependencies (exact == versions)
-├── README.md                   # Full methodology, usage, and provenance guide
-└── result.md                   # Audited results and deliverables report
+shock_pct = ((post_event_price - pre_event_price) / pre_event_price) * 100
 ```
+
+Labels:
+
+- **Up**: shock is greater than +0.5%
+- **Down**: shock is less than -0.5%
+- **Neutral**: shock is between -0.5% and +0.5%
+
+### Volatility
+
+A volatility spike is identified when the event-window daily return volatility is more
+than 1.5 times the pre-event baseline volatility.
+
+```text
+event volatility > 1.5 * baseline volatility
+```
+
+The default threshold is 1.5, but the enriched dataset also provides results for 1.25
+and 2.0. Events without enough verified historical data are marked **Unknown**, rather
+than automatically marked No.
+
+### Market-adjusted return
+
+The project adds a market-adjusted return estimate and cumulative abnormal return (CAR).
+These aim to separate a stock's reaction from overall Nifty 50 movement.
+
+## Model benchmark
+
+The benchmark uses a chronological evaluation process:
+
+1. Sort events by effective trading date.
+2. Reserve 70% for training.
+3. Reserve 15% for validation.
+4. Reserve 15% for testing.
+5. Add a five-day embargo around partition boundaries.
+6. Select models using validation macro-F1.
+7. Refine the selected model on training plus validation data.
+8. Evaluate it once on the untouched test period.
+
+The benchmark includes Random Forest, Logistic Regression, Ridge Classifier, SVM,
+majority-class baseline, and stratified baseline.
+
+### Performance measures
+
+**Macro-F1 is the primary measure.**
+
+- It is important because every event class should count fairly.
+- Direction has three classes: Up, Neutral, and Down.
+- Volatility has fewer Yes events than No events.
+- Macro-F1 penalizes poor prediction of minority or difficult classes.
+
+Additional measures:
+
+- **Balanced accuracy:** average recall across classes
+- **Yes precision:** proportion of predicted volatility spikes that are correct
+- **Yes recall:** proportion of actual volatility spikes detected
+- **Yes F1:** balance of Yes precision and recall
+- **Average precision:** quality of probability ranking for volatility spikes
+- **Matthews correlation coefficient:** an overall agreement score
+- **Accuracy:** included for context, but not used as the only decision measure
+
+The test results currently show that prediction is difficult. This is useful evidence
+that the available pre-event features have limited predictive strength.
+
+See [EXPERIMENT_STATUS.md](/C:/Users/ronad/OneDrive/Desktop/NiftyEvent50_Combined_20_Models/docs/EXPERIMENT_STATUS.md)
+for the complete benchmark status.
+
+## Current benchmark results
+
+The selected model for both tasks was Random Forest.
+
+- **Direction:** 50.21% accuracy, 38.55% macro-F1
+- **Volatility:** 71.31% accuracy, 56.26% macro-F1
+- **Volatility Yes recall:** 27.03%
+
+These numbers should be interpreted as weak predictive benchmarks, not as evidence of
+high-confidence trading performance.
+
+Detailed files are available in
+[outputs/benchmark/](/C:/Users/ronad/OneDrive/Desktop/NiftyEvent50_Combined_20_Models/outputs/benchmark/).
+
+## Project structure
+
+```text
+NiftyEvent50/
+├── NIFTY_EVENT_50/                 Dataset and release package
+│   ├── data/                       50 source announcement CSV files
+│   ├── cache/                      Historical market data
+│   ├── ohlcv_windows/              3,199 event windows
+│   └── *.csv / *.xlsx              Dataset and audit outputs
+├── scripts/
+│   ├── enrich_niftyevent50.py      Market feature and CAR enrichment
+│   ├── benchmark_niftyevent50.py   Model benchmark
+│   ├── audit_deduplication.py      Deduplication sensitivity
+│   ├── event_study_analysis.py     Event and sector summaries
+│   └── pipeline/                   Dataset construction scripts
+├── notebooks/
+│   └── dataset_statistics.ipynb
+├── outputs/
+│   ├── benchmark/                  Metrics, confusion matrices and models
+│   ├── reports/                    Quality and retrieval reports
+│   └── releases/                   Packaged release archive
+├── docs/
+│   ├── EXPERIMENT_STATUS.md
+│   └── context/
+└── archive/
+    └── Historical experimental notebooks
+```
+
+## Install and run
+
+### 1. Install Python
+
+Python 3.9 or later is recommended.
+
+### 2. Create a virtual environment
+
+```powershell
+python -m venv .venv
+.venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip
+pip install -r requirements.txt
+```
+
+### 3. Enrich the dataset
+
+```powershell
+python scripts/enrich_niftyevent50.py
+```
+
+This creates or updates `NIFTY_EVENT_50/NiftyEvent50_enriched.csv`.
+
+### 4. Run the model benchmark
+
+```powershell
+python scripts/benchmark_niftyevent50.py
+```
+
+Benchmark outputs are written to `outputs/benchmark/`.
+
+### 5. Run deduplication sensitivity analysis
+
+```powershell
+python scripts/audit_deduplication.py
+```
+
+### 6. Generate event-study summaries
+
+```powershell
+python scripts/event_study_analysis.py
+```
+
+### 7. Verify the dataset
+
+```powershell
+python scripts/pipeline/verify_dataset.py
+```
+
+The verification checks price calculations, direction labels, and volatility labels
+from the stored source windows and price histories.
+
+## Reconstruct the dataset from source files
+
+```powershell
+python scripts/pipeline/scraper.py --data-dir NIFTY_EVENT_50/data --output NIFTY_EVENT_50/raw_events.csv
+python scripts/pipeline/ohlcv_fetch.py --raw-events NIFTY_EVENT_50/raw_events.csv --cache-dir NIFTY_EVENT_50/cache --windows-dir NIFTY_EVENT_50/ohlcv_windows --output-summary NIFTY_EVENT_50/intermediate_windows_summary.csv
+python scripts/pipeline/label_compute.py --summary NIFTY_EVENT_50/intermediate_windows_summary.csv --cache-dir NIFTY_EVENT_50/cache --windows-dir NIFTY_EVENT_50/ohlcv_windows --output NIFTY_EVENT_50/candidate_labeled_events.csv
+python scripts/pipeline/verify_dataset.py
+```
+
+## Important limitations
+
+- The stock universe represents 49 current Nifty 50 constituents plus BSE Ltd.
+  It is not a historical point-in-time Nifty 50 universe.
+- The project does not use analyst-consensus earnings data.
+- Financial Results means that financial statements were announced, not that the
+  company beat or missed analyst expectations.
+- The price-shock measure is descriptive. CAR and abnormal-return fields provide
+  stronger market-adjusted analysis.
+- Volatility thresholds are operational definitions and should be tested at multiple levels.
+- Weak model performance does not imply that an event has no economic effect.
+- The project is for research and education, not investment advice.
+
+## Experimental notebooks
+
+The original 10-model and combined 20-model notebooks are retained only in
+[archive/](/C:/Users/ronad/OneDrive/Desktop/NiftyEvent50_Combined_20_Models/archive/)
+for audit and reproducibility history.
+
+They contain random fallback features in exploratory cells and must not be cited as
+validated machine-learning evidence.
+
+## Documentation
+
+- [Experiment status and validation findings](docs/EXPERIMENT_STATUS.md)
+- [NIFTY_EVENT_50 release README](NIFTY_EVENT_50/README.md)
+- [Project development notes](docs/PROJECT_DEVELOPMENT.md)
+
+## Citation
+
+Please cite the project as **NiftyEvent-50: Indian Corporate-Event Dataset and Market
+Reaction Benchmark**. Include the dataset version and the exact source files used when
+reporting results.
