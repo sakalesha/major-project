@@ -1,0 +1,18 @@
+{
+  "selected_model": "ResidualMLP",
+  "primary_metric": "macro_f1",
+  "test_accuracy": 0.4050632911392405,
+  "test_balanced_accuracy": 0.3723824786324787,
+  "test_mcc": 0.03729791159452268,
+  "test_macro_f1": 0.3607060030574852,
+  "test_precision_macro": 0.362732057441226,
+  "test_recall_macro": 0.3723824786324787,
+  "n_train": 2221,
+  "n_validation": 468,
+  "n_test": 474,
+  "class_names": [
+    "Down",
+    "Neutral",
+    "Up"
+  ]
+}

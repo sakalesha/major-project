@@ -1,0 +1,52 @@
+{
+  "direction": {
+    "selected_model": "ResidualMLP",
+    "primary_metric": "macro_f1",
+    "test_accuracy": 0.4050632911392405,
+    "test_balanced_accuracy": 0.3723824786324787,
+    "test_mcc": 0.03729791159452268,
+    "test_macro_f1": 0.3607060030574852,
+    "test_precision_macro": 0.362732057441226,
+    "test_recall_macro": 0.3723824786324787,
+    "n_train": 2221,
+    "n_validation": 468,
+    "n_test": 474,
+    "class_names": [
+      "Down",
+      "Neutral",
+      "Up"
+    ]
+  },
+  "volatility": {
+    "selected_model": "ResidualMLP",
+    "primary_metric": "macro_f1",
+    "test_accuracy": 0.7088607594936709,
+    "test_balanced_accuracy": 0.5284788921152558,
+    "test_mcc": 0.0683936577814639,
+    "test_macro_f1": 0.5268229166666667,
+    "test_precision_macro": 0.5410628019323671,
+    "test_recall_macro": 0.5284788921152558,
+    "n_train": 2220,
+    "n_validation": 468,
+    "n_test": 474,
+    "class_names": [
+      "No",
+      "Yes"
+    ],
+    "selected_threshold": 0.7399999999999998,
+    "validation_threshold_macro_f1": 0.5741742490340271,
+    "test_yes_precision": 0.30434782608695654,
+    "test_yes_recall": 0.1891891891891892,
+    "test_yes_f1": 0.23333333333333334,
+    "test_yes_average_precision": 0.29454953045373694
+  },
+  "dataset": "C:\\Users\\ronad\\OneDrive\\Desktop\\NiftyEvent50_Combined_20_Models\\NIFTY_EVENT_50\\NiftyEvent50_enriched.csv",
+  "seed": 42,
+  "device": "cpu",
+  "splits": {
+    "train": 2221,
+    "validation": 468,
+    "test": 474,
+    "embargo_days": 5
+  }
+}

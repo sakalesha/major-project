@@ -1,0 +1,33 @@
+{
+  "results": [
+    {
+      "model": "ARIMA",
+      "order": [
+        5,
+        1,
+        0
+      ],
+      "test_mae": 963.6883085177149,
+      "test_rmse": 979.4253230333944,
+      "test_direction_accuracy": 0.056666666666666664
+    },
+    {
+      "model": "GARCH",
+      "test_variance_mae": 2.749866132384286,
+      "test_variance_rmse": 4.736796350593373
+    },
+    {
+      "model": "EGARCH",
+      "test_variance_mae": 2.4783509398930477,
+      "test_variance_rmse": 4.719356815157986
+    },
+    {
+      "model": "VAR",
+      "lags": 1,
+      "stock_mae": 0.010694726995218477,
+      "stock_rmse": 0.014407757404130648,
+      "market_mae": 0.005973748646624908,
+      "market_rmse": 0.008647763407423377
+    }
+  ]
+}

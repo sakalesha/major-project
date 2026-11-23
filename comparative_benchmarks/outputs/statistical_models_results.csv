@@ -1,0 +1,5 @@
+model,order,test_mae,test_rmse,test_direction_accuracy,test_variance_mae,test_variance_rmse,lags,stock_mae,stock_rmse,market_mae,market_rmse
+ARIMA,"[5, 1, 0]",963.6883085177149,979.4253230333944,0.056666666666666664,,,,,,,
+GARCH,,,,,2.749866132384286,4.736796350593373,,,,,
+EGARCH,,,,,2.4783509398930477,4.719356815157986,,,,,
+VAR,,,,,,,1.0,0.010694726995218477,0.014407757404130648,0.005973748646624908,0.008647763407423377

@@ -1,0 +1,20 @@
+{
+  "task": "Direction",
+  "selected_model": "Transformer Encoder",
+  "primary_metric": "macro_f1",
+  "n_train": 2221,
+  "n_validation": 468,
+  "n_test": 474,
+  "classes": [
+    "Down",
+    "Neutral",
+    "Up"
+  ],
+  "threshold": null,
+  "test_accuracy": 0.5084388185654009,
+  "test_balanced_accuracy": 0.4224382199925678,
+  "test_mcc": 0.16458742427113188,
+  "test_precision_macro": 0.4519692905899215,
+  "test_recall_macro": 0.4224382199925678,
+  "test_macro_f1": 0.41702640439482547
+}

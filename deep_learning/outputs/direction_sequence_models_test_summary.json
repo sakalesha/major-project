@@ -1,0 +1,18 @@
+{
+  "selected_model": "TCN",
+  "primary_metric": "macro_f1",
+  "test_accuracy": 0.4767932489451477,
+  "test_balanced_accuracy": 0.42719249349684135,
+  "test_mcc": 0.15152832779682288,
+  "test_macro_f1": 0.4171338261320037,
+  "test_precision_macro": 0.4191427382438618,
+  "test_recall_macro": 0.42719249349684135,
+  "n_train": 2221,
+  "n_validation": 468,
+  "n_test": 474,
+  "class_names": [
+    "Down",
+    "Neutral",
+    "Up"
+  ]
+}

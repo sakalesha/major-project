@@ -1,0 +1,26 @@
+{
+  "task": "Volatility",
+  "selected_model": "Transformer Encoder",
+  "primary_metric": "macro_f1",
+  "n_train": 2220,
+  "n_validation": 468,
+  "n_test": 474,
+  "classes": [
+    "No",
+    "Yes"
+  ],
+  "threshold": {
+    "threshold": 0.5599999999999998,
+    "macro_f1": 0.6450362379908984
+  },
+  "test_accuracy": 0.7257383966244726,
+  "test_balanced_accuracy": 0.6239297148388058,
+  "test_mcc": 0.24486352854743326,
+  "test_precision_macro": 0.6209519195833838,
+  "test_recall_macro": 0.6239297148388058,
+  "test_macro_f1": 0.6223616796999485,
+  "test_positive_precision": 0.41739130434782606,
+  "test_positive_recall": 0.43243243243243246,
+  "test_positive_f1": 0.4247787610619469,
+  "test_average_precision_yes": 0.4331404881619486
+}

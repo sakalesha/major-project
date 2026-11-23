@@ -1,0 +1,58 @@
+{
+  "direction": {
+    "selected_model": "TCN",
+    "primary_metric": "macro_f1",
+    "test_accuracy": 0.4767932489451477,
+    "test_balanced_accuracy": 0.42719249349684135,
+    "test_mcc": 0.15152832779682288,
+    "test_macro_f1": 0.4171338261320037,
+    "test_precision_macro": 0.4191427382438618,
+    "test_recall_macro": 0.42719249349684135,
+    "n_train": 2221,
+    "n_validation": 468,
+    "n_test": 474,
+    "class_names": [
+      "Down",
+      "Neutral",
+      "Up"
+    ]
+  },
+  "volatility": {
+    "selected_model": "Transformer",
+    "primary_metric": "macro_f1",
+    "test_accuracy": 0.7109704641350211,
+    "test_balanced_accuracy": 0.5767627131263495,
+    "test_mcc": 0.16054180940916057,
+    "test_macro_f1": 0.5795559756816078,
+    "test_precision_macro": 0.5839394268345636,
+    "test_recall_macro": 0.5767627131263495,
+    "n_train": 2220,
+    "n_validation": 468,
+    "n_test": 474,
+    "class_names": [
+      "No",
+      "Yes"
+    ],
+    "selected_threshold": 0.5599999999999998,
+    "validation_threshold_macro_f1": 0.6490517423713171,
+    "test_yes_precision": 0.3673469387755102,
+    "test_yes_recall": 0.32432432432432434,
+    "test_yes_f1": 0.3444976076555024,
+    "test_yes_average_precision": 0.37171744086526715
+  },
+  "models": [
+    "LSTM",
+    "GRU",
+    "1D-CNN",
+    "TCN",
+    "CNN-LSTM",
+    "Transformer"
+  ],
+  "sequence_window": [
+    "T-3",
+    "T-2",
+    "T-1"
+  ],
+  "seed": 42,
+  "device": "cpu"
+}
